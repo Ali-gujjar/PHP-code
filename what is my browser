@@ -1,0 +1,143 @@
+<?php
+	// echo $_SERVER['HTTP_USER_AGENT'];
+	// $browser = get_browser();
+	// foreach($browser as $part) {
+	// 	print_r($part);
+	// }
+// http://www.php.net/manual/en/function.get-browser.php#101125
+	function getBrowser() {
+	  $u_agent = $_SERVER['HTTP_USER_AGENT'];
+	  $bname = 'Unknown';
+	  $platform = 'Unknown';
+	  $version= "";
+
+	  // First get the platform?
+	  if (preg_match('/linux/i', $u_agent)) {
+	    $platform = 'linux';
+	  } elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
+	    $platform = 'mac';
+	  } elseif (preg_match('/windows|win32/i', $u_agent)) {
+	    $platform = 'windows';
+	  }
+
+	  // Next get the name of the useragent yes seperately and for good reason
+	  if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)) {
+	    $bname = 'Internet Explorer';
+	    $ub = "MSIE";
+	  } elseif(preg_match('/Firefox/i',$u_agent)) {
+	    $bname = 'Mozilla Firefox';
+	    $ub = "Firefox";
+	  } elseif(preg_match('/Chrome/i',$u_agent)) {
+	    $bname = 'Google Chrome';
+	    $ub = "Chrome";
+	  } elseif(preg_match('/Safari/i',$u_agent)) {
+	    $bname = 'Apple Safari';
+	    $ub = "Safari";
+	  } elseif(preg_match('/Opera/i',$u_agent)) {
+	    $bname = 'Opera';
+	    $ub = "Opera";
+	  } elseif(preg_match('/Netscape/i',$u_agent)) {
+	    $bname = 'Netscape';
+	    $ub = "Netscape";
+	  }
+
+	  // finally get the correct version number
+	  $known = array('Version', $ub, 'other');
+	  $pattern = '#(?<browser>' . join('|', $known) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+		if (!preg_match_all($pattern, $u_agent, $matches)) {
+		  // we have no matching number just continue
+		}
+
+		// see how many we have
+		$i = count($matches['browser']);
+		if ($i != 1) {
+		  //we will have two since we are not using 'other' argument yet
+		  //see if version is before or after the name
+		  if (strripos($u_agent,"Version") < strripos($u_agent,$ub)){
+		    $version= $matches['version'][0];
+		  }
+		  else {
+		    $version= $matches['version'][1];
+		  }
+		}
+		else {
+		  $version= $matches['version'][0];
+		}
+
+		// check if we have a number
+		if ($version==null || $version=="") {$version="?";}
+
+		return array(
+		  'userAgent' => $u_agent,
+		  'name'      => $bname,
+		  'version'   => $version,
+		  'platform'  => $platform,
+		  'pattern'    => $pattern
+		  );
+		}
+		// now try it
+		$ua = getBrowser();
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>My Browser Info</title>
+		<!-- bootstrap css -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<!-- Popper JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<!-- custom css -->
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<div class="container text-center py-5">
+			<div>
+				<h1>My Browser Info</h1>
+			</div>
+			<div class="row mt-5 px-5">
+				<div class="col-1 col-md-1 col-lg-1"></div>
+				<div class="col-4 col-md-3 col-lg-3">
+					<h1 style="font-size: 17px;">Your Browser</h1>
+				</div>
+				<div style="text-align: left;" class="col-6 col-7 col-lg-7">
+					<?php echo $ua['name']; ?>
+				</div>
+			</div>
+			<div class="row mt-5 px-5">
+				<div class="col-1 col-md-1 col-lg-1"></div>
+				<div class="col-4 col-md-3 col-lg-3">
+					<h1 style="font-size: 17px;">Browser Version</h1>
+				</div>
+				<div style="text-align: left;" class="col-6 col-7 col-lg-7">
+					<?php echo $ua['version']; ?>
+				</div>
+			</div>
+			<div class="row mt-5 px-5">
+				<div class="col-1 col-md-1 col-lg-1"></div>
+				<div class="col-4 col-md-3 col-lg-3">
+					<h1 style="font-size: 17px;">Your OS</h1>
+				</div>
+				<div style="text-align: left;" class="col-6 col-7 col-lg-7">
+					<?php echo $ua['platform']; ?>
+				</div>
+			</div>
+			<div class="row mt-5 px-5">
+				<div class="col-1 col-md-1 col-lg-1"></div>
+				<div class="col-4 col-md-3 col-lg-3">
+					<h1 style="font-size: 17px;">User Agent</h1>
+				</div>
+				<div style="text-align: left;" class="col-6 col-7 col-lg-7">
+					<?php echo $ua['userAgent']; ?>
+				</div>
+			</div>
+			</div>
+		</div>
+	</body>
+</html>
