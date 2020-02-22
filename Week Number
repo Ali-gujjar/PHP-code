@@ -1,0 +1,65 @@
+<?php    
+    session_start();
+    $timezone = $_SESSION['time'];
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Week Number</title>
+    <!-- bootstrap css -->
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- custom css -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <style type="text/css">
+        .epoch input[type="text"] {
+            width: 55px;
+        }
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if("<?php echo $timezone; ?>".length==0){
+                var visitortime = new Date();
+                var visitortimezone = "GMT " + -visitortime.getTimezoneOffset()/60;
+                $.ajax({
+                    type: "GET",
+                    url: "timezone.php",
+                    data: 'time='+ visitortimezone,
+                    success: function(){
+                        location.reload();
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="text-center mt-5">
+        <h1 style="font-size: 27px;">Week Number Calculator</h1>
+    </div>
+    <div class="container-fluid pt-3">
+        <div class="row my-3">
+            <div class="col-1 col-md-1 col-lg-1"></div>
+            <div class="col-10 col-md-10 col-lg-10">
+                <?php
+                    echo "<span style='font-size:20px; font-weight: 700;'>This Week is : </span>";
+                ?>
+                <div class="border py-3 mt-2">
+                    <?php
+                    echo "<span class='ml-5' style='font-weight:500;font-size:30px'>week ".date("W")."</span>";
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
