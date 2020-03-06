@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Ascii to Text</title>
+		<!-- bootstrap css -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<!-- Popper JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<!-- custom css -->
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="mt-5 px-5">
+				<form method="POST">
+					<h1>Ascii to Text</h1>
+					<ul class="list-unstyled">
+						<li>
+							<label>Enter Your Ascii Code:</label>
+						</li>
+						<li>
+							<textarea name="text" class="w-75" placeholder="Enter Ascii code separating with space."></textarea>
+						</li>
+				    <li>
+				    	<input type="submit" name="submit" value="Convert to Text" class="btn btn-success w-25 py-2 px-2 mt-3">
+				    </li>
+			  	</ul>
+				</form>
+			</div>
+			<div class="mt-5 px-5">
+				<ul class="list-unstyled">
+					<li>
+						<label>OutPut:</label>
+					</li>
+					<li>
+						<div style="height: 195px; border: 1px solid black; border-color: rgb(169,169,169);" class="output-height w-75">
+							<?php
+								if ( isset ( $_POST['submit'] ) )
+								{
+									$ascii = $_POST['text'];
+									//converting string of ascii to array.
+									$i_ascii = explode(' ', $ascii);
+									$count = count($i_ascii);
+									for($i=0; $i<$count; $i++)
+									{
+										$text[] = chr($i_ascii[$i]);
+									}
+									$count = count($text);
+									for($i=0; $i<$count; $i++)
+									{
+										// echo $i_ascii[$i]." : ";
+										echo $text[$i];
+									}
+								}
+				 			?>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
