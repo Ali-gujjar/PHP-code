@@ -1,0 +1,84 @@
+<?php
+function get_tiny_url($url)  {  
+	$ch = curl_init();  
+	$timeout = 5;  
+	curl_setopt($ch,CURLOPT_URL,'http://tinyurl.com/api-create.php?url='.$url);  
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);  
+	curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);  
+	$data = curl_exec($ch);  
+	curl_close($ch);  
+	return $data;  
+}
+
+if(isset($_POST['url']))
+{
+	//test it out!
+	$new_url = get_tiny_url($_POST['url']);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>url Shortner</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- bootstrap css -->
+	<!-- bootstrap css -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<!-- custom css -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<div class="container-fluid">
+		<form method="post">
+			<div class="row mt-5">
+				<div class="col-1 col-lg-2 col-md-2 col-sm-1"></div>
+				<div class="col-10 col-lg-8 col-md-8 col-sm-10">
+					Enter url:
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-1 col-lg-2 col-md-2 col-sm-1"></div>
+				<div class="col-10 col-lg-8 col-md-8 col-sm-10">
+					<input type="url" name="url" required="" style="width: 80%;" class="form-control" placeholder="https://www.google.com" value="<?php if(isset($_POST['submit'])){echo $_POST['url'];}?>">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-1 col-lg-2 col-md-2 col-sm-1"></div>
+				<div class="col-10 col-lg-8 col-md-8 col-sm-10">
+					<input type="submit" class="form-control btn btn-success w-25 mt-5" name="submit" value="Shorten url">
+				</div>
+			</div>
+		</form>
+		<?php
+		if(isset($_POST['submit']))
+		{
+			?>
+			<div class="row mt-5">
+				<div class="col-1 col-lg-2 col-md-2 col-sm-1"></div>
+				<div class="col-10 col-lg-8 col-md-8 col-sm-10 border">
+					<div class="row">
+						<div class="col-12 col-lg-6 col-md-6">
+							<h1 style="font-size: 30px;">Original url</h1>
+							<p><?php echo $_POST['url'];?></p>
+						</div>
+						<div class="col-12 col-lg-6 col-md-6">
+							<h1 style="font-size: 30px;">Original url</h1>
+							<p><?php echo $new_url;?></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
+		}
+		?>
+	</div>
+</body>
+</html>
